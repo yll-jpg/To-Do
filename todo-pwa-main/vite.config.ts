@@ -73,6 +73,14 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 3000,
+    proxy: {
+      // ESTA ES LA MAGIA: Redirige las llamadas de /api al backend
+      '/api': {
+        target: 'http://localhost:5173',
+        changeOrigin: true,
+        secure: false,
+      }
+      }
   },
   build: {
     sourcemap: true,

@@ -1,8 +1,24 @@
 :root {
-  --primary-color: #A7C7E7;
-  --background-color: #FFFDF5;
-  --text-color: #4B4B4B;
-  --text-secondary-color: #8B8B8B;
+  /* --- Paleta "Goal Board" --- */
+  
+  /* Amarillo Vibrante (Botones principales/Acciones) */
+  --primary-color: #FFC805; 
+  
+  /* Azul Cielo (Títulos/Acentos) */
+  --secondary-color: #4AA3F0; 
+  
+  /* Fondo General (Blanco con tinte azul muy sutil) */
+  --background-color: #F4F9FF;
+  
+  /* Textos */
+  --text-color: #455A64;       /* Gris azulado oscuro, más suave que el negro puro */
+  --text-secondary-color: #90A4AE;
+  --text-on-primary: #5D4037;  /* Marrón oscuro para leer bien sobre amarillo */
+
+  /* Variables de Forma */
+  --radius-xl: 30px;    /* Para contenedores grandes */
+  --radius-btn: 50px;   /* Para botones (forma de píldora) */
+  --shadow-card: 0 10px 40px -10px rgba(0,0,0,0.08);
 }
 
 /* --- Estilos globales --- */
@@ -13,14 +29,15 @@ body {
   color: var(--text-color);
   background-color: var(--background-color);
   line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* --- Contenedor Principal Reutilizable --- */
 .container {
   width: 100%;
-  max-width: 1400px;
+  max-width: 1200px; /* Un poco más estrecho para lectura cómoda */
   margin: 0 auto;
-  padding: 0 clamp(20px, 5vw, 80px);
+  padding: 0 20px;
   box-sizing: border-box;
 }
 
@@ -36,50 +53,54 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 30px 0;
+  padding: 20px 0;
   width: 100%;
 }
 
 .logo {
   font-size: 1.8rem;
-  font-weight: bold;
+  font-weight: 800; /* Extra bold */
+  color: var(--secondary-color);
+  letter-spacing: -0.5px;
 }
 
-/* --- Estilos de Botones --- */
+/* --- Estilos de Botones (Estilo Píldora) --- */
 .btn {
   display: inline-block;
-  padding: 12px 24px;
-  border-radius: 8px;
+  padding: 12px 30px; /* Más padding lateral para forma alargada */
+  border-radius: var(--radius-btn);
   text-decoration: none;
-  font-weight: bold;
-  transition: all 0.3s ease;
+  font-weight: 700;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   border: 2px solid transparent;
   cursor: pointer;
   text-align: center;
+  font-size: 1rem;
 }
 
 .btn-primary {
   background-color: var(--primary-color);
-  color: white;
-  box-shadow: 0 4px 15px rgba(167, 199, 231, 0.4);
+  color: var(--text-on-primary); /* Texto oscuro para contraste */
+  box-shadow: 0 4px 15px rgba(255, 200, 5, 0.3);
 }
 
 .btn-primary:hover {
-  background-color: #fff;
-  color: var(--primary-color);
-  border-color: var(--primary-color);
-  box-shadow: 0 4px 20px rgba(167, 199, 231, 0.6);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 200, 5, 0.5);
+  filter: brightness(1.05);
 }
 
 .btn-secondary {
-  background-color: transparent;
-  color: var(--text-color);
-  border: 2px solid #555;
+  background-color: #fff;
+  color: var(--secondary-color);
+  border: 2px solid var(--secondary-color);
 }
 
 .btn-secondary:hover {
-  background-color: var(--text-color);
-  color: var(--background-color);
+  background-color: var(--secondary-color);
+  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(74, 163, 240, 0.3);
 }
 
 /* --- Sección Principal (Hero) --- */
@@ -88,36 +109,38 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 60px 0;
+  padding: 80px 0;
+  text-align: center;
 }
 
 .hero-content {
-  max-width: 1400px;
+  max-width: 800px;
   margin: 0 auto;
-  padding: 0 40px;
-  text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 30px;
+  gap: 25px;
 }
 
 .hero-title {
-  font-size: 4.5rem;
-  line-height: 1.1;
+  font-size: 3.5rem;
+  line-height: 1.2;
   margin: 0;
-  background: linear-gradient(45deg, #A7C7E7, #FDFD96);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  color: var(--secondary-color);
+  font-weight: 800;
+}
+
+/* Opcional: Gradiente suave en el texto del título */
+.hero-title span {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, #81D4FA 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .hero-subtitle {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   line-height: 1.6;
-  max-width: 900px;
-  margin: 0 auto;
+  max-width: 600px;
   color: var(--text-secondary-color);
 }
 
@@ -125,8 +148,9 @@ body {
 .footer {
   padding: 40px 0;
   text-align: center;
-  color: #666;
+  color: var(--text-secondary-color);
   font-size: 0.9rem;
+  opacity: 0.7;
 }
 
 /* --- Estilos para la Página de Login --- */
@@ -136,87 +160,87 @@ body {
   align-items: center;
   flex-grow: 1;
   min-height: 80vh;
-  padding: 40px 0;
+  padding: 20px;
   width: 100%;
 }
 
 .login-box {
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 50px;
-  border-radius: 16px;
-  border: 1px solid #E0E0E0;
+  width: 100%;
+  max-width: 450px;
+  padding: 50px 40px;
+  border-radius: var(--radius-xl); /* Bordes muy redondos */
   background-color: #ffffff;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border: none; /* Sin borde duro */
+  box-shadow: var(--shadow-card);
   text-align: left;
 }
 
 .login-box h1 {
   text-align: center;
   margin-top: 0;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
   font-size: 2rem;
-  color: var(--text-color);
+  color: var(--secondary-color);
 }
 
 .input-group {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .input-group label {
   display: block;
-  margin-bottom: 8px;
-  font-weight: bold;
-  color: var(--text-secondary-color);
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: var(--text-color);
   font-size: 0.95rem;
+  margin-left: 10px; /* Alinear con el input redondo */
 }
 
 .input-group input {
   width: 100%;
-  padding: 14px;
-  border-radius: 8px;
-  border: 1px solid #DDEAFB;
-  background-color: #FAFCFF;
+  padding: 15px 20px;
+  border-radius: 50px; /* Inputs redondos tipo píldora */
+  border: 2px solid transparent;
+  background-color: #F0F4F8; /* Fondo gris/azul muy claro */
   color: var(--text-color);
   font-size: 1rem;
   box-sizing: border-box;
-  transition: border-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .input-group input:focus {
   outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(167, 199, 231, 0.25);
+  background-color: #fff;
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 4px rgba(74, 163, 240, 0.1);
 }
 
-/* Centra el botón de login */
+/* Botón de login ancho completo */
 .login-box .btn-primary {
   width: 100%;
-  padding: 16px;
+  padding: 15px;
   font-size: 1.1rem;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .error-message {
-  color: #ff4d4d;
+  background-color: #FFEBEE;
+  color: #D32F2F;
+  padding: 10px;
+  border-radius: 15px;
   text-align: center;
   margin-top: 20px;
   font-weight: 500;
+  font-size: 0.9rem;
 }
 
-/* --- Media Query para pantallas ultra grandes (opcional) --- */
-@media (min-width: 2560px) {
-  .hero-content {
-    max-width: 1400px;
-    padding: 0 80px;
-  }
-
+/* --- Responsividad --- */
+@media (max-width: 768px) {
   .hero-title {
-    font-size: 5rem;
+    font-size: 2.5rem;
   }
-
-  .container {
-    max-width: 1400px;
-    padding: 0 80px;
+  
+  .login-box {
+    padding: 30px 20px;
   }
 }

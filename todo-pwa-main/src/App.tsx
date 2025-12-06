@@ -15,10 +15,9 @@ function App() {
 
       <main className="hero">
         <div className="hero-content">
-          <h1 className="hero-title">Organiza tus tareas, Organiza tu vida.</h1>
+          <h1 className="hero-title">Empieza hoy, organiza tu mañana.</h1>
           <p className="hero-subtitle">
-            To-Do Gestionar tareas de forma simple,
-            rápida y accesible desde cualquier dispositivo.
+            ¡Planifica y completa tus tareas fácilmente, desde cualquier lugar y en cualquier momento!
           </p>
           <Link to="/login" className="btn btn-primary">
             Comenzar Ahora
@@ -27,7 +26,7 @@ function App() {
       </main>
 
       <footer className="footer">
-        <p>&copy; 2025 To-Do</p>
+        <p>&copy; 2025 To-Do </p>
       </footer>
     </div>
   );

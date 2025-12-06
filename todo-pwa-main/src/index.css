@@ -1,21 +1,41 @@
+/* Importamos la fuente Poppins para toda la aplicación */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Poppins', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
+  /* Forzamos modo claro para este diseño específico */
   color-scheme: light;
-  color: rgb(75, 75, 75);
-  background-color: #FFFDF5;
+  
+  /* Usamos los colores base del tema (coinciden con App.css) */
+  color: #455A64; 
+  background-color: #c2d1e4;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+/* Aplicar Nabla SOLO a los títulos para que destaque */
+h1, .titulo-cool {
+  font-family: 'Nabla', system-ui; /* Nabla aquí */
+  font-variation-settings: "EDPT" 81; /* Esto fuerza el efecto de profundidad que querías */
+  font-weight: 400; /* Nabla no usa bold tradicional */
+}
+
+
+
+
 }
 
 body {
-  margin: 0; 
+  margin: 0;
   width: 100%;
+  min-height: 100vh;
+  background-color: #F4F9FF; /* Asegura fondo continuo */
 }
 
 #root {
@@ -27,11 +47,19 @@ body {
 
 a {
   font-weight: 500;
-  color: #A7C7E7;
+  color: #4AA3F0; /* Tu azul secundario */
   text-decoration: inherit;
+  transition: color 0.3s ease;
 }
+
 a:hover {
-  color: #89b3e0;
+  color: #2185d0; /* Un azul un poco más oscuro para hover */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: 700;
+  color: #4AA3F0; /* Títulos en azul por defecto */
 }
 
 h1 {
@@ -39,34 +67,21 @@ h1 {
   line-height: 1.1;
 }
 
+/* Reset básico de botones para quitar estilos feos del navegador */
 button {
-  border-radius: 8px;
+  border-radius: 50px; /* Redondeado global */
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
-  font-weight: 500;
+  font-weight: 600;
   font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #FFFDF5;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: transform 0.2s, box-shadow 0.2s;
+  background-color: transparent; /* Quitamos el fondo negro por defecto */
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #7bc1ff;
-    background-color: #FFFDF5;
-  }
-  a:hover {
-    color: #a0a3d9;
-  }
-  button {
-    background-color: #FFFDF5;
-  }
+button:focus,
+button:focus-visible {
+  outline: 2px solid #4AA3F0; /* Outline azul suave */
+  outline-offset: 2px;
 }

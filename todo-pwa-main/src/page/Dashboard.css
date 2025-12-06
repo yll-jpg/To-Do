@@ -1,5 +1,17 @@
 /* customer/src/page/Dashboard.css */
 
+:root {
+  /* Paleta Pastel Definida */
+  --primary-yellow: #FFD54F;
+  --primary-blue: #64B5F6;
+  --bg-soft-blue: #E3F2FD;
+  --bg-soft-yellow: #FFF8E1;
+  --text-dark: #455A64;
+  --text-light: #90A4AE;
+  --white: #FFFFFF;
+  --shadow-soft: 0 8px 24px rgba(149, 157, 165, 0.1);
+}
+
 .dashboard-container {
   max-width: 900px;
   margin: 0 auto;
@@ -8,183 +20,328 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  box-sizing: border-box;
+  box-sizing: border-box; /* Crucial para que el padding no rompa el ancho */
+  font-family: 'Poppins', sans-serif;
+  color: var(--text-dark);
 }
 
 .dashboard-header {
   width: 100%;
   text-align: center;
-
-  margin-bottom: 30px;
+  margin-bottom: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
+  gap: 10px;
 }
 
 .dashboard-header h1 {
   margin: 0;
-  color: var(--primary-color);
+  color: var(--primary-blue);
   font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
+/* --- Panel de Controles (Búsqueda y Filtro) --- */
 .task-controls {
   display: flex;
+  flex-wrap: wrap; /* Permite que los elementos bajen si no caben */
   gap: 15px;
   align-items: center;
-  background-color: #1a1a1a;
-  padding: 20px;
-  border-radius: 12px;
+  background-color: var(--white);
+  padding: 15px; /* Reducido un poco para ganar espacio interno */
+  border-radius: 30px; /* Un poco menos radio para que no corte esquinas en móvil */
   margin-bottom: 30px;
-  border: 1px solid #333;
+  border: none;
   width: 100%;
   box-sizing: border-box;
+  box-shadow: var(--shadow-soft);
 }
 
 .task-controls input,
 .task-controls select {
-  padding: 12px 15px;
-  border-radius: 12px;
-  border: 1px solid #444;
-  background-color: #222;
-  color: var(--text-color);
+  padding: 12px 20px;
+  border-radius: 30px;
+  border: 2px solid transparent;
+  background-color: var(--bg-soft-blue);
+  color: var(--text-dark);
   font-size: 1rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box; /* Asegura que el padding no aumente el ancho */
+  max-width: 100%; /* Evita que se salga del contenedor padre */
 }
 
+.task-controls input:focus,
+.task-controls select:focus {
+  outline: none;
+  background-color: var(--white);
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 4px rgba(100, 181, 246, 0.15);
+}
+
+/* En escritorio, el input intenta ocupar el espacio sobrante */
 .task-controls input {
   flex-grow: 1;
+  min-width: 200px; /* Mínimo ancho antes de forzar un salto de línea */
 }
 
+/* --- Lista de Tareas --- */
 .task-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
   width: 100%;
 }
 
 .task-item {
-  background-color: #1a1a1a;
-  padding: 20px;
-  border-radius: 15px;
-  border-left: 5px solid #555;
+  background-color: var(--white);
+  padding: 25px;
+  border-radius: 24px;
+  border: none;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   width: 100%;
   box-sizing: border-box;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  position: relative;
+  overflow: hidden;
+}
+
+.task-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 6px;
+  width: 100%;
+  background-color: var(--bg-soft-yellow);
 }
 
 .task-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
 }
 
 .task-item.completed {
-  border-left-color: var(--primary-color);
-  background-color: #222;
+  background-color: #F5F7FA;
+  opacity: 0.85;
+  box-shadow: none;
 }
 
 .task-item.completed .task-title {
   text-decoration: line-through;
-  color: var(--text-secondary-color);
+  color: var(--text-light);
 }
 
 .task-content {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 20px;
   flex-grow: 1;
+  z-index: 1;
+  /* Importante para textos largos en móvil */
+  min-width: 0; 
 }
 
 .task-content input[type="checkbox"] {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   cursor: pointer;
+  accent-color: var(--primary-blue);
+  border-radius: 50%;
+  flex-shrink: 0; /* Evita que el checkbox se aplaste */
 }
 
 .task-title {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  /* Truncar texto muy largo con puntos suspensivos si es necesario */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .task-description {
-  margin: 4px 0 0;
-  font-size: 0.9rem;
+  margin: 6px 0 0;
+  font-size: 0.95rem;
+  color: var(--text-light);
 }
 
-.task-form-edit {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  gap: 10px;
-  box-sizing: border-box;
-}
-
-.task-input-edit .task-form-edit textarea{
-  padding: 12px;
-  border-radius: 12px;
-  border: 1px solid var(--primary-color);
-  background-color: #333;
-  color: var(--text-color);
-  font-size: 1.1rem;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.task-actions {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.task-actions .btn {
-  padding: 8px 12px;
-  font-size: 0.9rem;
-}
-
-.no-tasks {
-  text-align: center;
-  padding: 50px;
-  background-color: #1a1a1a;
-  border-radius: 8px;
-  color: var(--text-secondary-color);
-  border: 1px dashed #444;
-  width: 100%;
-  box-sizing: border-box;
-}
-
+/* --- Formularios y Edición --- */
 .add-task-form {
     display: grid;
     grid-template-columns: 1fr 1fr auto;
     gap: 15px;
     width: 100%;
     box-sizing: border-box;
-    justify-items: center;
-    align-items: center;
+    padding: 20px;
+    background-color: var(--white);
+    border-radius: 30px;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 20px;
 }
 
 .add-task-form input {
   width: 100%;
+  padding: 14px 20px;
+  border-radius: 25px;
+  border: 2px solid transparent;
+  background-color: var(--bg-soft-blue);
+  box-sizing: border-box;
+  color: var(--text-dark);
+  max-width: 100%;
+}
+
+.add-task-form input:focus {
+    background-color: var(--white);
+    border-color: var(--primary-yellow);
+    outline: none;
+}
+
+.task-form-edit {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 15px;
   box-sizing: border-box;
 }
 
-.task-form-edit .task-actions {
-    justify-content: flex-end;
-    width: 100%;
+.task-input-edit, .task-form-edit textarea {
+  padding: 15px;
+  border-radius: 20px;
+  border: 2px solid var(--primary-blue);
+  background-color: var(--white);
+  color: var(--text-dark);
+  font-size: 1rem;
+  width: 100%;
+  font-family: inherit;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
-.task-input-edit, .task-form-edit textarea {
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid var(--primary-color);
-    background-color: #333;
-    color: var(--text-color);
-    font-size: 1.1rem;
-    font-family: 'Poppins', sans-serif;
+.task-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  z-index: 2;
+}
+
+.task-actions button, .add-task-form button {
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s;
+    background-color: var(--primary-yellow);
+    color: #5d4037;
+    white-space: nowrap;
+}
+
+.task-actions button:hover, .add-task-form button:hover {
+    transform: scale(1.05);
+    filter: brightness(1.05);
+}
+
+.no-tasks {
+  text-align: center;
+  padding: 60px;
+  background-color: var(--bg-soft-blue);
+  border-radius: 30px;
+  color: var(--primary-blue);
+  font-weight: 500;
+  border: none;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .task-item.unsynced {
-    opacity: 0.7;
-    border-left-color: orange;
+    opacity: 0.8;
+    background-color: var(--bg-soft-yellow);
+}
+
+/* ========================================= */
+/* === MEDIA QUERIES (RESPONSIVIDAD MÓVIL) === */
+/* ========================================= */
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 20px 15px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 2rem;
+  }
+
+  /* 1. Panel de Controles (Buscar y Filtrar) en columna */
+  .task-controls {
+    flex-direction: column; /* Apilar verticalmente */
+    align-items: stretch;   /* Estirar al ancho total */
+    padding: 20px;
+    border-radius: 25px;
+    height: auto; /* Dejar que crezca según contenido */
+    max-width: 100%; /* Asegurar contenedor */
+  }
+
+  /* REGLA CLAVE PARA ARREGLAR EL "SOBRESALIR" EN MOVIL */
+  .task-controls input,
+  .task-controls select {
+    width: 100%; 
+    max-width: 100%; /* Límite estricto */
+    margin: 0;   
+    flex-grow: 0;
+    font-size: 16px; /* Importante: 16px evita que el iPhone haga zoom al tocar */
+  }
+
+  /* 2. Formulario de Añadir Tarea en columna */
+  .add-task-form {
+    display: flex; /* Cambiar Grid a Flex Column para control total */
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+  }
+
+  .add-task-form input {
+    width: 100%;
+    max-width: 100%;
+    font-size: 16px; /* Evitar zoom también aquí */
+  }
+
+  .add-task-form button {
+    width: 100%;
+    margin-top: 5px;
+    padding: 15px;
+  }
+
+  /* 3. Tarjeta de Tarea */
+  .task-item {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+  }
+  
+  .task-content {
+    width: 100%;
+    margin-bottom: 15px; /* Separar contenido de botones */
+  }
+
+  .task-title {
+    white-space: normal; /* Permitir que el título salte de línea en móvil */
+  }
+
+  .task-actions {
+    width: 100%;
+    justify-content: space-between; /* Botones distribuidos */
+    gap: 10px;
+  }
+  
+  .task-actions button {
+    flex: 1; /* Botones del mismo tamaño */
+    justify-content: center;
+  }
 }
