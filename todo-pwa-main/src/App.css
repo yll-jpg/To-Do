@@ -1,3 +1,7 @@
+/* AGREGA ESTO AL INICIO DE TU ARCHIVO */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
 :root {
   /* --- Paleta "Goal Board" --- */
   
