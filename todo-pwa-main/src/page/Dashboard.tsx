@@ -1,19 +1,13 @@
-import { useEffect, useMemo, useState, type FormEvent, useCallback, type ChangeEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent, useCallback, type ChangeEvent } from "react";
 import { useNavigate, BrowserRouter } from "react-router-dom"; 
-// Requiere: npm install canvas-confetti
-// Opcional para TS: npm install --save-dev @types/canvas-confetti
 import confetti from "canvas-confetti"; 
-
 
 import { api, setAuth } from '../api';
 import './Dashboard.css';
 import { getLocalTasks, setLocalTasks, getSyncQueue, addToSyncQueue, clearSyncQueue } from '../utils/storage';
 import type { Task, FilterStatus } from '../types';
 
-
-
-
-// Componente interno con la lógica (renombrado para envolverlo luego)
+// Componente interno con la lógica
 function DashboardContent() {
     const [tasks, setTasks] = useState<Task[]>(() => getLocalTasks());
     const [newTask, setNewTask] = useState({ title: '', description: '' });
@@ -22,17 +16,29 @@ function DashboardContent() {
     const [editingTask, setEditingTask] = useState<Task | null>(null);
     const [loading, setLoading] = useState(true);
     const [isOnline, setIsOnline] = useState(navigator.onLine);
+    
+    // 1. AÑADIDO: Referencia para bloquear sincronizaciones simultáneas
+    const isSyncing = useRef(false);
+    
     const navigate = useNavigate();
 
     // Sincronización
     const syncWithServer = useCallback(async () => {
         if (!navigator.onLine) return;
+
+        // 2. MODIFICADO: Si ya se está sincronizando, detenemos la ejecución
+        if (isSyncing.current) return;
         
         const queue = getSyncQueue();
         if (queue.length === 0) return;
 
+        // 3. Bloqueamos el proceso
+        isSyncing.current = true;
+
         try {
             const { data } = await api.post('/tasks/sync', { actions: queue });
+            
+            // IMPORTANTE: Limpiamos la cola solo después del éxito
             clearSyncQueue();
             
             // Actualizamos con la verdad del servidor
@@ -41,6 +47,9 @@ function DashboardContent() {
             console.log("Sincronización completada.");
         } catch (error) { 
             console.error("Error en sincronización:", error); 
+        } finally {
+            // 4. AÑADIDO: Liberamos el bloqueo siempre (exito o error)
+            isSyncing.current = false;
         }
     }, []);
     
@@ -55,12 +64,15 @@ function DashboardContent() {
         const loadInitialData = async () => {
             setLoading(true);
             try {
+                // Intentamos cargar del servidor
                 const { data: serverTasks } = await api.get('/tasks');
                 setTasks(serverTasks);
                 setLocalTasks(serverTasks);
+                // Intentamos sincronizar cualquier cambio pendiente local
                 await syncWithServer(); 
             } catch (error) {
                 console.error("Usando datos locales por error de red/servidor.");
+                // Si falla, nos quedamos con lo local
                 setTasks(getLocalTasks());
             } finally {
                 setLoading(false);
@@ -69,8 +81,14 @@ function DashboardContent() {
         
         loadInitialData();
         
-        const handleOnline = () => { setIsOnline(true); syncWithServer(); };
+        const handleOnline = () => { 
+            setIsOnline(true); 
+            console.log("Conexión restaurada, intentando sincronizar...");
+            syncWithServer(); 
+        };
+        
         const handleOffline = () => setIsOnline(false);
+        
         window.addEventListener('online', handleOnline);
         window.addEventListener('offline', handleOffline);
         
@@ -91,9 +109,8 @@ function DashboardContent() {
     
     function handleFilterChange(e: ChangeEvent<HTMLSelectElement>) { setFilter(e.target.value as FilterStatus); }
 
-    // --- EFECTO DE CONFETI (GAMIFICACIÓN) ---
+    // --- EFECTO DE CONFETI ---
     const triggerCelebration = () => {
-        // Lanza confeti desde múltiples ángulos
         const count = 200;
         const defaults = { origin: { y: 0.7 } };
 
@@ -132,14 +149,13 @@ function DashboardContent() {
         addToSyncQueue({ type: 'create', payload: newTaskObject });
         setNewTask({ title: '', description: '' });
         
-        // Intentar sincronizar inmediatamente
+        // Intentar sincronizar inmediatamente si hay red
         syncWithServer();
     }
 
     async function toggleTaskStatus(task: Task) {
         const newStatus = (task.status === 'Pending' ? 'Completed' : 'Pending') as 'Pending' | 'Completed';
         
-        // ¡Disparar confeti si se completa!
         if (newStatus === 'Completed') {
             triggerCelebration();
         }
@@ -188,8 +204,6 @@ function DashboardContent() {
 
     return (
         <div className="dashboard-container container">
-           
-
             <header className="dashboard-header">
                 <h1>Mis Tareas</h1>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -244,7 +258,6 @@ function DashboardContent() {
                                 </form>
                             ) : (
                                 <>
-                                    {/* Icono Visual "Grip" (simula Drag & Drop) */}
                                     <div style={{cursor: 'grab', color: '#CFD8DC', marginRight: '15px', display: 'flex', flexDirection: 'column', gap: '3px', padding: '5px'}}>
                                         <div style={{display:'flex', gap:'3px'}}>
                                             <div style={{width:'4px', height:'4px', borderRadius:'50%', background:'currentColor'}}></div>
@@ -285,11 +298,6 @@ function DashboardContent() {
     );
 }
 
-// Envolvemos el componente en Router SOLO para la vista previa.
 export default function Dashboard() {
-    return (
-        
-            <DashboardContent />
-       
-    );
+    return <DashboardContent />;
 }
